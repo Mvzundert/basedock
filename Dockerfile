@@ -47,19 +47,32 @@ RUN apt-get update && \
         php7.1-memcached \
         php7.1-gd \
         php7.1-dev \
-        pkg-config \
-        libcurl4-openssl-dev \
-        libedit-dev \
+        wget \
+        build-essential \
+        nghttp2 \
+        libnghttp2-dev \
         libssl-dev \
+        pkg-config \
+        libedit-dev \
         libxml2-dev \
         xz-utils \
         libsqlite3-dev \
         sqlite3 \
         git \
-        curl \
         vim \
         nano \
     && apt-get clean
+
+#####################################
+# Curl: use a HTTP2 supported version
+#####################################
+RUN wget https://curl.haxx.se/download/curl-7.58.0.tar.gz && \
+    tar -xvf curl-7.58.0.tar.gz && \
+    cd curl-7.58.0 && \
+    ./configure --with-nghttp2 --prefix=/usr/local --with-ssl=/usr/local/ssl && \
+    make && \
+    make install && \
+    ldconfig
 
 #####################################
 # Composer:
